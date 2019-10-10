@@ -1,11 +1,13 @@
 package com.revature.test.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 
 import org.junit.Test;
 
+import com.revature.exception.InvalidCartException;
 import com.revature.models.ShoppingCartItem;
 import com.revature.services.CheckoutService;
 
@@ -25,6 +27,17 @@ public class CheckoutServiceSubtotalTest {
 		
 		// Assertion to confirm that our expectation is met
 		assertEquals("Cost of one apple should be $2.00", expectation, result);
+	}
+	
+	@Test(expected = InvalidCartException.class)
+	public void testNegativeQuantityCart() {
+		// setup
+		ShoppingCartItem apples = 
+				new ShoppingCartItem("apple", -1, new BigDecimal(2.0));
+		ShoppingCartItem[] cart = { apples };
+		
+		BigDecimal result = service.calculateSubtotal(cart);
+		fail("An exception should be thrown, this line should not be reached.");
 	}
 
 	@Test

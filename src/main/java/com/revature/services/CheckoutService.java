@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import com.revature.CheckoutInterface;
 import com.revature.enums.State;
+import com.revature.exception.InvalidCartException;
 import com.revature.models.ShoppingCartItem;
 
 public class CheckoutService implements CheckoutInterface {
@@ -12,6 +13,11 @@ public class CheckoutService implements CheckoutInterface {
 	public BigDecimal calculateSubtotal(ShoppingCartItem[] items) {
 		BigDecimal subtotal = new BigDecimal(0);
 		for(ShoppingCartItem item : items) {
+			
+			if (item.getQuantity() < 1) {
+				throw new InvalidCartException();
+			}
+			
 			subtotal = subtotal.add(item.getPrice()
 					.multiply(new BigDecimal(item.getQuantity()))
 			);
